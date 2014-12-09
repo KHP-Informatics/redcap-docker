@@ -18,3 +18,11 @@ MAINTAINER Amos Folarin <amosfolarin@gmail.com>
 
 COPY ./download/redcap /app/redcap
 
+# runtime sensitive information provided as [--env, --env-file] environment variables,
+# which are processed by parse_redcap_config.sh into the database.php file
+# control is then passed to the run.sh script
+ENTRYPOINT [parse_redcap_config.sh]
+
+CMD [run.sh]
+
+
