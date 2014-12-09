@@ -9,10 +9,12 @@
 
 #------------------------------------------------------------------------------
 # Redcap Container
+# build from inside the ./build dir see README.md
 #------------------------------------------------------------------------------
-
-MAINTAINER Amos Folarin <amosfolarin@gmail.com>
 
 FROM tutum/apache-php
 
+MAINTAINER Amos Folarin <amosfolarin@gmail.com>
+
+COPY ./download/redcap /app/redcap
 
