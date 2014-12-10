@@ -55,15 +55,18 @@ There are two components the database and the redcap web application.
 
 ### Installation
 point the browser to 
-localhost:80/redcap/install.php
-follow instructions
+http://localhost:80/redcap/install.php
+
+follow instructions:
 
 Create the MYSQL USER
 1) connect to the mysql server, create database, create user and grant specific privilages
 ```
-mysql -h172.17.0.10 -uadmin -p'pwd-in-mysqsl.pwd'
+$ docker inspect redcap-db
+$ mysql -h<see-docker-inspect> -uadmin -p'pwd-in-mysqsl.pwd'
+Then create the redcap db user:
 CREATE DATABASE redcap;
-CREATE USER 'redcap_admin'@'%' IDENTIFIED BY 'your-password';
+CREATE USER 'redcap_admin'@'%' IDENTIFIED BY '!**your-password**!';
 GRANT CREATE,SELECT,INSERT,UPDATE,DELETE ON redcap.* TO 'redcap_admin'@'%';
 ```
 
@@ -85,9 +88,21 @@ Hit refresh on the browser
 
 2) Complete the registration.
 
-3) Check everything works? Create a test project
+*Think I can automate untill here.. there must be some way to get the sql statements without resorting to the browser output???
+if I can then perhaps some combo of files in here /app/redcap/redcap_v6.0.12/Resources/sql*
+3) Exec SQL statements to create the database
+3.1) Copy the statements from the browser
+3.2) save in a file e.g. redcap-tables.sql
+3.3) $ mysql -h<see-docker-inspect> -uadmin -p'pwd-in-mysqsl.pwd' redcap < redcap-tables.sql
+NOTE: don't try to paste these sql statements into the term, it's pretty fragile. Pipe it instead as above.
 
-4) Commit the image
+4) Check everything works? 
+4.1) see config testpage: http://localhost/redcap/redcap_v6.0.12/ControlCenter/check.php?upgradeinstall=1
+4.2) Create a test project
+
+5) Commit the image, DO NOT PUBLISH IMAGE.
+
+6) Use this image to deploy (remember to push in a new password for each client)
 
 
 

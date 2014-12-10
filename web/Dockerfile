@@ -16,13 +16,14 @@ FROM tutum/apache-php
 
 MAINTAINER Amos Folarin <amosfolarin@gmail.com>
 
+# redcap web-application
 COPY ./download/redcap /app/redcap
 
-# runtime sensitive information provided as [--env, --env-file] environment variables,
+
+# Runtime sensitive information provided as [--env, --env-file] environment variables,
 # which are processed by parse_redcap_config.sh into the database.php file
 # control is then passed to the run.sh script
-ENTRYPOINT [parse_redcap_config.sh]
-
-CMD [run.sh]
+COPY ./parse_redcap_config.sh /app
+ENTRYPOINT [/app/parse_redcap_config.sh]
 
 
