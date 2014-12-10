@@ -78,21 +78,23 @@ sed -in -e "s/upload_max_filesize = 2M/upload_max_filesize = 32M/" /etc/php5/apa
 ## uncomment max_input_vars in php.ini
 sed -in -e "s/\; max_input_vars = 1000/max_input_vars = 1000/" /etc/php5/apache2/php.ini
 
+## ERROR: Cron job not running! May require supervisor, try cron in separate container first.
+
+## setup cron, may require some supervisor? - CRITICAL
+
+## setup SMTP server for emails - CRITICAL
+
+## https + SSL certs strongly - CRITICAL
+
 ## Mcrypt extenstion not installed - RECOMMENDED
 
 ## Missing UTF-8 fonts for PDF export - RECOMMENDED
 
-## CRITICAL: setup cron, may require some supervisor?
-
-## setup SMTP server for emails - CRITICAL
-
 ## Change default location for edocs folder - RECOMMENDED
 
-## https + SSL certs strongly - CRITICAL
 
 
-
-#LASTLY: execute the docker run CMD now
+#LASTLY: execute the docker run CMD now, standup apache.
 exec $CMD
 
 
