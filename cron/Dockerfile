@@ -7,21 +7,23 @@
 # 2) [afolarin/redcap:mysql] 
 # 3) [afolarin/redcap:cron]
 
-#USAGE
-#docker run --name="redcap-db" -d -p 3306:3306 afolarin/redcap:mysql
+# USAGE:
+# docker -volumes-from redcap-web afolarin/cron
 
 #------------------------------------------------------------------------------
-# Database Container: MySQL
+# Redcap Container
+# build from inside the ./build dir see README.md
 #------------------------------------------------------------------------------
 
-FROM tutum/mysql
+FROM ubuntu
 
 MAINTAINER Amos Folarin <amosfolarin@gmail.com>
 
+# update
+RUN apt-get update \
+    && apt-get install -y cron
 
-# Use the /run.sh script to create the redcap_admin db user -- should be easy
-# it may be necessary to remove the admin db user after all installation is done
-# they are required for initial table creation otherwise drop add then drop
-# CREAT grants for redcap_admin db user.
+# command run cron for redcap
+CMD ['/sbin/cron -f && /usr/bin/crontab -u root -l; echo "* * * * * /usr/bin/php /app/redcap/cron.php  > /dev/null" | /usr/bin/crontab -u root -']
 
 

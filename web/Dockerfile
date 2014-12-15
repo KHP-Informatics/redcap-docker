@@ -3,9 +3,12 @@
 #------------------------------------------------------------------------------
 
 #The Containers in the System:
-# 1) [base: tutum/apache-php] <-- Redcap
-# 2) [base: /mysql] 
+# 1) [afolarin/redcap:webapp]
+# 2) [afolarin/redcap:mysql] 
+# 3) [afolarin/redcap:cron]
 
+# USAGE:
+# docker run --name="redcap-web" --link="redcap-db:REDCAP_DB" -d -p 80:80 afolarin/redcap:webapp
 
 #------------------------------------------------------------------------------
 # Redcap Container
