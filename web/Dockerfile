@@ -8,11 +8,8 @@
 # 3) [afolarin/redcap:cron]
 
 # USAGE (from redcap-docker/web):
-# docker run --name="redcap-web" --link="redcap-db:REDCAP_DB" -d -p 80:80 \
-#    REDCAP_DB_PORT_3306_TCP_ADDR_="", REDCAP_DB_NAME_="", REDCAP_DB_USER_="admin", \
-#    REDCAP_DB_USER_PWD_="hFH1ufw7TLrU", REDCAP_DB_SALT_="TiProTg1983", \
-#    afolarin/redcap:webapp
-
+# docker run --name="redcap-web" --link="redcap-db:REDCAP_DB" \
+#    --env-file="env.list" -d -p 80:80 afolarin/redcap:webapp
 
 
 #------------------------------------------------------------------------------
