@@ -3,8 +3,8 @@
 #------------------------------------------------------------------------------
 
 #The Containers in the System:
-# 1) [afolarin/redcap:webapp]
-# 2) [afolarin/redcap:mysql] 
+# 1) [afolarin/redcap:mysql] 
+# 2) [afolarin/redcap:webapp]
 # 3) [afolarin/redcap:cron]
 
 # USAGE:

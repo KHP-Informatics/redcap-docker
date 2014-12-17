@@ -1,0 +1,16 @@
+If you want to build the container with this dockerfile you will need to download redcap binary and unzip here.
+i.e:
+redcap-docker/web/download/
+                    └── redcap
+                        ├── api
+                        ├── edocs
+                        ├── languages
+                        ├── plugins
+                        ├── redcap_v6.0.12
+                        ├── surveys
+                        ├── temp
+                        └── webtools2
+
+http://project-redcap.org/
+https://iwg.devguard.com/trac/redcap
+

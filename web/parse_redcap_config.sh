@@ -16,8 +16,8 @@
 
 #RUNTIME ENV VARS
 REDCAP_DB_PORT_3306_TCP_ADDR_="" #The hostname of the linked database container
-REDCAP_DB_NAME_="" #redcap database name created in mysql container
-REDCAP_DB_USER_="" #redcap database user, not the default mysql container "admin" user which is overprivileged for redcap
+REDCAP_DB_NAME_="redcap_mysql" #redcap database name created in mysql container
+REDCAP_DB_USER_="redcap_admin" #redcap database user, not the default mysql container "admin" user which is overprivileged for redcap
 REDCAP_DB_USER_PWD_="" #redcap database password
 REDCAP_DB_SALT_="" #the >12 digit salt for the database
 
@@ -56,6 +56,16 @@ REDCAP_DB_SALT_==$REDCAP_DB_SALT
 else
 exit 1
 fi
+
+## CONNECT TO THE MYSQL SERVER CONTAINER, CREATE THE MYSQL redcap_mysql DATABASE, REDCAP USER redcap_admin
+mysql -h${REDCAP_DB_PORT_3306_TCP_ADDR_} -u${REDCAP_DB_USER_} -p${REDCAP_DB_USER_PWD_} << EOF
+create database ${REDCAP_DB_NAME_};
+REATE USER 'redcap_admin'@'localhost' IDENTIFIED BY '${REDCAP_DB_USER_PWD_}';
+GRANT DROP,DELETE,INSERT,SELECT,UPDATE ON * . * TO 'redcap_admin'@'localhost';
+EOF
+
+
+
 
 ## Substitute env vars parsed at runtime into web-container:/app/redcap/database.php config file
 sed -in -e s/your_mysql_host_name/\$REDCAP_DB_PORT_3306_TCP_ADDR_/ \
