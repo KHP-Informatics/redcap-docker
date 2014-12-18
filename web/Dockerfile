@@ -21,6 +21,12 @@ FROM tutum/apache-php
 
 MAINTAINER Amos Folarin <amosfolarin@gmail.com>
 
+# install mysql client
+RUN apt-get update && \
+        apt-get -yq install mysql-server-5.5 && \
+        rm -rf /var/lib/apt/lists/*
+
+
 # redcap web-application
 COPY ./download/redcap /app/redcap
 
