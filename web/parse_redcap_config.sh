@@ -75,11 +75,11 @@ EOF
 
 
 ## Substitute env vars parsed at runtime into web-container:/app/redcap/database.php config file
-sed -in -e "s/your_mysql_host_name/\${REDCAP_DB_PORT_3306_TCP_ADDR_/}" \
--e "s/your_mysql_db_name/\${REDCAP_DB_NAME_}/" \
--e "s/your_mysql_db_username/\${REDCAP_DB_USER_}/" \
--e "s/your_mysql_db_password/\${REDCAP_DB_USER_PWD_}/" \
--e "s/\$salt = ''/\$salt = \${REDCAP_DB_SALT_}/" \
+sed -in -e "s/your_mysql_host_name/${REDCAP_DB_PORT_3306_TCP_ADDR_}/" \
+-e "s/your_mysql_db_name/${REDCAP_DB_NAME_}/" \
+-e "s/your_mysql_db_username/${REDCAP_DB_USER_}/" \
+-e "s/your_mysql_db_password/${REDCAP_DB_USER_PWD_}/" \
+-e "s/\$salt = ''/\$salt = ${REDCAP_DB_SALT_}/" \
 /app/redcap/database.php
 
 #Unset the password env var
