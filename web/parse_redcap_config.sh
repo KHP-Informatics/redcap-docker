@@ -8,8 +8,13 @@
 # AUTHOR: Amos Folarin <amosfolarin@gmail.com>
 
 # USAGE: 
-# [ENTRYPOINT] [CMD]
+# Initialize and parameterize the 
+# [ENTRYPOINT] =  parse_redcap_config.sh [CMD = /run.sh]
 # parse_redcap_config.sh "/run.sh"
+# 
+# This script is not required just to restart the container.
+# To restart the container, with default CMD and ENTRYPOINT if you need to 
+# restart the apache webserver, using pre-existing params.
 #------------------------------------------------------------------------------
 
 #ENTRYPOINT param parsing for RedCap Container
@@ -121,7 +126,7 @@ sed -in -e "s/\; max_input_vars = 1000/max_input_vars = 10000/" /etc/php5/apache
 
 
 ## RESTART apache so uses new config
-/etc/init.d/apache2 restart
+#/etc/init.d/apache2 restart
 
 
 #LASTLY: execute the docker run CMD now, standup apache.

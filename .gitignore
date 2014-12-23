@@ -1,2 +1,3 @@
 web/download/redcap/
 *.pwd
+*.sql

@@ -8,7 +8,7 @@
 # 3) [afolarin/redcap:cron]
 
 # USAGE:
-# docker -volumes-from redcap-web afolarin/cron
+# docker run -d --name="redcap-cron" --volumes-from="redcap-web" afolarin/redcap:cron
 
 #------------------------------------------------------------------------------
 # Redcap Container
@@ -24,6 +24,6 @@ RUN apt-get update \
     && apt-get install -y cron
 
 # command run cron for redcap
-CMD ['/sbin/cron -f && /usr/bin/crontab -u root -l; echo "* * * * * /usr/bin/php /app/redcap/cron.php  > /dev/null" | /usr/bin/crontab -u root -']
+CMD ['/sbin/cron && /usr/bin/crontab -u root -l; echo "* * * * * /usr/bin/php /app/redcap/cron.php  > /dev/null" | /usr/bin/crontab -u root -']
 
 

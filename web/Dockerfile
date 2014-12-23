@@ -31,6 +31,10 @@ RUN apt-get update && \
 COPY ./download/redcap /app/redcap
 
 
+# the cron running container will require some volumes exposed
+# "* * * * * /usr/bin/php /app/redcap/cron.php  > /dev/null" | /usr/bin/crontab -u root -']
+VOLUME ["/usr/bin/"," /app/redcap/"]
+
 # Runtime sensitive information provided as [--env, --env-file] environment variables,
 # which are processed by parse_redcap_config.sh into the database.php file
 # control is then passed to the run.sh script
