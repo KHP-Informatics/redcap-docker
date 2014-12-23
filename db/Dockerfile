@@ -8,10 +8,10 @@
 # 3) [afolarin/redcap:cron]
 
 #USAGE (from redcap-docker/db):
-# docker run --name="redcap-db" -d -p 3306:3306 afolarin/redcap:mysql
-# docker logs redcap-db &> mysql.pwd
-# docker inspect --format='{{.NetworkSettings.IPAddress}}' redcap-db &>> mysql.pwd
-# docker inspect --format='{{.NetworkSettings.Ports}}' redcap-db &>> mysql.pwd
+# docker run --name="redcap-db" -d -p 3306:3306 afolarin/redcap:mysql; 
+# docker logs redcap-db &> mysql.pwd;
+# docker inspect --format='{{.NetworkSettings.IPAddress}}' redcap-db &>> mysql.pwd;
+# docker inspect --format='{{.NetworkSettings.Ports}}' redcap-db &>> mysql.pwd;
 
 #------------------------------------------------------------------------------
 # Database Container: MySQL

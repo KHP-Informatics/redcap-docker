@@ -67,12 +67,21 @@ fi
 
 ## CONNECT TO THE MYSQL SERVER CONTAINER as the default tutum MYSQL_USER "admin", which is used to
 ## create myql redcap database, user and password as provided at runtime
+#mysql -h${REDCAP_DB_PORT_3306_TCP_ADDR_} -u${MYSQL_USER} -p${MYSQL_PASS} << EOF
+#CREATE DATABASE ${REDCAP_DB_NAME_};
+#CREATE USER "${REDCAP_DB_USER_}"@"${REDCAP_DB_PORT_3306_TCP_ADDR_}" IDENTIFIED BY "${REDCAP_DB_USER_PWD_}";
+#GRANT DROP,DELETE,INSERT,SELECT,UPDATE ON ${REDCAP_DB_NAME_}.* TO "${REDCAP_DB_USER_}"@"${REDCAP_DB_PORT_3306_TCP_ADDR_}";
+#EOF
+
+#User account for connecting from remote host, a root account exists for connecting from localhost
+## CONNECT TO THE MYSQL SERVER CONTAINER as the default tutum MYSQL_USER "admin", which is used to
+## create myql redcap database, user and password as provided at runtime
 mysql -h${REDCAP_DB_PORT_3306_TCP_ADDR_} -u${MYSQL_USER} -p${MYSQL_PASS} << EOF
 CREATE DATABASE ${REDCAP_DB_NAME_};
-CREATE USER "${REDCAP_DB_USER_}"@"localhost" IDENTIFIED BY "${REDCAP_DB_USER_PWD_}";
-GRANT DROP,DELETE,INSERT,SELECT,UPDATE ON * . * TO "${REDCAP_DB_USER_}"@"localhost";
+CREATE USER "${REDCAP_DB_USER_}"@"%" IDENTIFIED BY "${REDCAP_DB_USER_PWD_}";
+GRANT DROP,DELETE,INSERT,SELECT,UPDATE ON ${REDCAP_DB_NAME_}.* TO "${REDCAP_DB_USER_}"@"%";
+FLUSH PRIVILEGES;
 EOF
-
 
 ## Substitute env vars parsed at runtime into web-container:/app/redcap/database.php config file
 sed -in -e "s/your_mysql_host_name/${REDCAP_DB_PORT_3306_TCP_ADDR_}/" \
@@ -91,9 +100,10 @@ export REDCAP_DB_USER_PWD=""
 
 ## increase upload_max_filesize in php.ini
 sed -in -e "s/upload_max_filesize = 2M/upload_max_filesize = 32M/" /etc/php5/apache2/php.ini
+sed -in -e "s/post_max_size = 8M/post_max_size = 32M/" /etc/php5/apache2/php.ini
 
 ## uncomment max_input_vars in php.ini
-sed -in -e "s/\; max_input_vars = 1000/max_input_vars = 1000/" /etc/php5/apache2/php.ini
+sed -in -e "s/\; max_input_vars = 1000/max_input_vars = 10000/" /etc/php5/apache2/php.ini
 
 ## ERROR: Cron job not running! May require supervisor, try cron in separate container first.
 
@@ -110,9 +120,14 @@ sed -in -e "s/\; max_input_vars = 1000/max_input_vars = 1000/" /etc/php5/apache2
 ## Change default location for edocs folder - RECOMMENDED
 
 
+## RESTART apache so uses new config
+/etc/init.d/apache2 restart
+
 
 #LASTLY: execute the docker run CMD now, standup apache.
 $CMD
+
+
 
 env
 /bin/bash
