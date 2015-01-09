@@ -54,7 +54,7 @@ There are three components the database and the redcap web application and the c
     https://registry.hub.docker.com/u/tutum/apache-php/
 ```
     $ cd ../web
-    $ docker run --name="redcap-web" --link="redcap-db:REDCAP_DB" -d -p 80:80 afolarin/redcap:webapp
+    $ docker run --name="redcap-web" --link="redcap-db:REDCAP_DB" --env-file="env.list" -d -p 80:80 afolarin/redcap:webapp
 ```
 
 ### Installation
