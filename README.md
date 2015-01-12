@@ -73,6 +73,9 @@ follow instructions, change desired parts:
 2.2) save in a file e.g. redcap-tables.sql
 2.3) $ mysql -h<see-docker-inspect> -uadmin -p'pwd-in-mysqsl.pwd' redcap < redcap-tables.sql
 NOTE: don't try to paste these sql statements into the terminal, it's pretty fragile. Pipe it instead as above.
+or even better this little trick
+(docker exec -i redcap-db mysql -uadmin -padminDbUserPwd) < redcap-db-build.sql
+
 
 4) Check everything works? 
 4.1) see config testpage: http://localhost/redcap/redcap_v6.0.12/ControlCenter/check.php?upgradeinstall=1
