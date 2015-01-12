@@ -8,7 +8,7 @@
 # 3) [afolarin/redcap:cron]
 
 # USAGE:
-# docker run -d --name="redcap-cron" -v ./cron-conf:/cron --volumes-from="redcap-web" afolarin/redcap:cron
+# docker run -d --name="redcap-cron" -v $(pwd)/cron-conf:/cron --volumes-from="redcap-web" afolarin/redcap:cron
 
 #------------------------------------------------------------------------------
 # Cron Container -- redcap requires a cron process to run /app/redcap/cron.php
@@ -28,12 +28,15 @@ RUN apt-get update && apt-get install -y mercurial
 #install devcron, there are issues running crontab in a docker container
 RUN pip install -e hg+https://bitbucket.org/dbenamy/devcron#egg=devcron
 
+#setup php alternatives to point to php5
+RUN ln -s -T /usr/bin/php5 /etc/alternatives/php
+
 # Setup defaults
 RUN mkdir /cron && \
     echo "* * * * * /cron/sample.sh" > /cron/crontab && \
     echo "echo hello world" > /cron/sample.sh && \
     chmod a+x /cron/sample.sh
 
-VOLUME ["/cron"]
+#VOLUME ["/cron"]
 
 CMD ["devcron.py", "/cron/crontab"]
