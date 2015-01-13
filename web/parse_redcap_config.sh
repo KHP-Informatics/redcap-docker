@@ -129,8 +129,10 @@ sed -in -e "s/\; max_input_vars = 1000/max_input_vars = 10000/" /etc/php5/apache
 #/etc/init.d/apache2 restart
 
 
+# NOTE! moving control of run.sh CMD to phusion/baseimage runit (/etc/services/apache/run) 
+# and above parsed configuration to the phusion/baseimage startup scripts (/etc/my_init.d)
 #LASTLY: execute the docker run CMD now, standup apache.
-$CMD
+#$CMD
 
 
 

@@ -8,8 +8,8 @@
 # 3) [afolarin/redcap:cron]
 
 # USAGE (from redcap-docker/web):
-# docker run --name="redcap-web" --link="redcap-db:REDCAP_DB" \
-#    --env-file="env.list" -d -p 80:80 afolarin/redcap:webapp
+# docker run --name="redcap-web" -v $(pwd)cron-conf/crontab:/app/cron-conf/crontab 
+# --link="redcap-db:REDCAP_DB"  --env-file="env.list" -d -p 80:80 afolarin/redcap:webapp
 
 
 #------------------------------------------------------------------------------
@@ -17,7 +17,7 @@
 # build from inside the ./build dir see README.md
 #------------------------------------------------------------------------------
 
-FROM tutum/apache-php
+FROM afolarin/cron-apache-php
 
 MAINTAINER Amos Folarin <amosfolarin@gmail.com>
 
@@ -30,15 +30,17 @@ RUN apt-get update && \
 # redcap web-application
 COPY ./download/redcap /app/redcap
 
+# Startup scripts in /etc/my_init.d are run at container start
+RUN mkdir -p /etc/my_init.d
+ADD cron-conf.sh /etc/my_init.d/cron-conf.sh
+ADD parse_redcap_config.sh /etc/my_init.d/parse_redcap_config.sh
+RUN chmod 755 /etc/my_init.d/*.sh
+
+# Daemonised processes
+# the single /etc/services/apache/run  (set in afolarin/cron-apache-php)
+
 
 # the cron running container will require some volumes exposed
 # "* * * * * /usr/bin/php /app/redcap/cron.php  > /dev/null" | /usr/bin/crontab -u root -']
-VOLUME ["/usr/bin/", "/app/redcap/"]
-
-# Runtime sensitive information provided as [--env, --env-file] environment variables,
-# which are processed by parse_redcap_config.sh into the database.php file
-# control is then passed to the run.sh script
-COPY parse_redcap_config.sh /app/
-ENTRYPOINT ["/app/parse_redcap_config.sh"]
-CMD ["/run.sh"]
+#VOLUME ["/usr/bin/", "/app/redcap/"]
 

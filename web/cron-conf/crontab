@@ -1,0 +1,2 @@
+# REDCap Cron Job (runs every minute)
+* * * * * /usr/bin/php /app/redcap/cron.php > /dev/null
