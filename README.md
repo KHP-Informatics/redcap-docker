@@ -7,20 +7,27 @@ Author(s): Amos Folarin
 
 Release Version:
 
-## Redcap Dockerfile
-These can and should be deployable relatively simply in any environment running Docker.
+## Redcap Dockerfiles
+With these instructions you should be able to build the redcap-docker images
+ can and should be deployable relatively simply in any environment running Docker.
 
 ## Distributing Docker Image
 I'm not making a public image of this available on DockerHub, the licence for RedCap precludes this.
 Instead, if you want to use this building it from the docker files is straightforward, see below. 
-You will need to get the web application from the redcap project at http://www.project-redcap.org/ 
-and unzip it in to web/download/ dir.
+You will need:
+1. clone the git repository https://github.com/KHP-Informatics/redcap-docker 
+2. Get the web application from the redcap project at http://www.project-redcap.org/ 
+and unzip it in to web/download/ dir
+3. [optional]  Get the pdf fonts especially for international projects
+https://iwg.devguard.com/trac/redcap/browser/misc/webtools2-pdf.zip?format=raw unzip webtools2-pdf.zip and 
+place the pdf directory replacing the existing web/download/redcap/webtools2/pdf dir.
 
-## Build Instructions
+
+## Build instructions
 There are three components the database and the redcap web application and the cron container.
 ### Build containers locally from the Dockerfiles
 
-1) cd into the web/ or db/ dir so we have the right build context:
+1. cd into the web/ or db/ dir so we have the right build context:
 ```
     $ cd db
     $ docker build --tag="afolarin/redcap:mysql" .
@@ -30,7 +37,7 @@ There are three components the database and the redcap web application and the c
 ```
 
 ### Run the containers
-1) Start the database. This is based on Tutum's mysql image.
+1. Start the database. This is based on Tutum's mysql image.
     https://github.com/tutumcloud/tutum-docker-mysql
     https://registry.hub.docker.com/u/tutum/mysql/
 ```
@@ -48,42 +55,42 @@ There are three components the database and the redcap web application and the c
     # change the MYSQL_PASS='' to the file password listed in mysql.pwd
 ```
 
-2) Start the webapplication, this will link to the MySQL database container. It is based on Tutum's 
+2. Start the webapplication, this will link to the MySQL database container. It is based on Tutum's 
     Apache-PHP image.
     https://github.com/tutumcloud/tutum-docker-php
     https://registry.hub.docker.com/u/tutum/apache-php/
 ```
     $ cd ../web
-    $ docker run --name="redcap-web" --link="redcap-db:REDCAP_DB" --env-file="env.list" -d -p 80:80 afolarin/redcap:webapp
+    docker run -d --name="redcap-web" -v $(pwd)/cron-conf/:/cron-conf/ --link="redcap-db:REDCAP_DB"  --env-file="env.list" --publish="80:80" afolarin/redcap:webapp
 ```
 
-### Installation
+### Complete the installation via the browser
 ```
     #get the db host ip address listed in the redcap-docker/db/mysql.pwd file
-    #point the browser to IP<port> if not port 80
+    #point the browser to IP<port>/redcap/install.php , <port> req. if not port 80
     # e.g. http://172.17.0.12:<port>/redcap/install.php
 ```
 
-follow instructions, change desired parts:
+1. Complete the registration.
 
-1) Complete the registration.
+2. Exec SQL statements to create the database
+	* Copy the statements from the browser
+	* save in a file e.g. redcap-tables.sql
+	* $ mysql -h<see-docker-inspect> -uadmin -p'pwd-in-mysqsl.pwd' redcap < redcap-tables.sql
+	**NOTE**: don't try to paste these sql statements into the terminal, it's pretty fragile. \
+	Pipe it instead as above. Or even better this little trick \
+	(docker exec -i redcap-db mysql -uadmin -padminDbUserPwd) < redcap-db-build.sql
 
-2) Exec SQL statements to create the database
-2.1) Copy the statements from the browser
-2.2) save in a file e.g. redcap-tables.sql
-2.3) $ mysql -h<see-docker-inspect> -uadmin -p'pwd-in-mysqsl.pwd' redcap < redcap-tables.sql
-NOTE: don't try to paste these sql statements into the terminal, it's pretty fragile. Pipe it instead as above.
-or even better this little trick
-(docker exec -i redcap-db mysql -uadmin -padminDbUserPwd) < redcap-db-build.sql
+3. Check everything works? 
+	* see config testpage: http://<IP:PORT>/redcap/redcap_v6.0.12/ControlCenter/check.php?upgradeinstall=1
+	* goto http://<IP:PORT>/redcap 
+	* go to "Control Centre>>File Upload Settings>>SET LOCAL FILE STORAGE LOCATION:" set to /edocs \
+	(you can change folder, but it should not be web accessible)
+	* Create a test project
 
+4. Commit the image, for your future use, DO NOT PUBLISH IMAGE redcap is not opensource!
 
-4) Check everything works? 
-4.1) see config testpage: http://localhost/redcap/redcap_v6.0.12/ControlCenter/check.php?upgradeinstall=1
-4.2) Create a test project
-
-5) Commit the image, DO NOT PUBLISH IMAGE not opensource!
-
-6) Use these images to deploy your redcap instances (remember to push in a new password for each client)
+5. Use these images to deploy your redcap instances (remember to push in a new password for each client)
 
 
 

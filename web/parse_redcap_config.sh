@@ -110,20 +110,25 @@ sed -in -e "s/post_max_size = 8M/post_max_size = 32M/" /etc/php5/apache2/php.ini
 ## uncomment max_input_vars in php.ini
 sed -in -e "s/\; max_input_vars = 1000/max_input_vars = 10000/" /etc/php5/apache2/php.ini
 
-## ERROR: Cron job not running! May require supervisor, try cron in separate container first.
 
 ## setup cron, may require some supervisor? - CRITICAL
+## --> could only setup *cron* as a multiprocess container, have based on phusion/baseimage
 
 ## setup SMTP server for emails - CRITICAL
+# NOTE DONE AS DEFAULT -- REQUIRE FOR PRODUCTION
 
 ## https + SSL certs strongly - CRITICAL
+# NOT DONE AS DEFAULT -- REQ FOR PRODUCTION
 
 ## Mcrypt extenstion not installed - RECOMMENDED
+# DONE -- installed php5-mycrypt
 
 ## Missing UTF-8 fonts for PDF export - RECOMMENDED
+# DONE -- add redcap/webtools2/pdf
 
-## Change default location for edocs folder - RECOMMENDED
-
+## Change default location for edocs folder (i.e. not in /apt web accessible)- RECOMMENDED
+cp -r /app/redcap/edocs /
+chown www-data:www-data /edocs -R
 
 ## RESTART apache so uses new config
 #/etc/init.d/apache2 restart
@@ -131,10 +136,11 @@ sed -in -e "s/\; max_input_vars = 1000/max_input_vars = 10000/" /etc/php5/apache
 
 # NOTE! moving control of run.sh CMD to phusion/baseimage runit (/etc/services/apache/run) 
 # and above parsed configuration to the phusion/baseimage startup scripts (/etc/my_init.d)
+# --- commenting out below as this script only handles initialization ---
 #LASTLY: execute the docker run CMD now, standup apache.
 #$CMD
 
 
 
-env
-/bin/bash
+#env
+#/bin/bash
