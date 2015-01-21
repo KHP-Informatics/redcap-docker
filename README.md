@@ -105,6 +105,7 @@ There are three components the database and the redcap web application and the c
     * Log in to REDCap with your new username and the password sent to you in the email. It will then ask you to set your password.
     Now that you have logged in with your new username, go back to the Designate Super User page and remove "site_admin" as a super user.
     * You're done and can now go and begin giving other users access to REDCap by creating them a username on the Create New User page.
+    * You will also be required to change the Project Settings from "Public" to "Table Based" (in Control Centre>>Edit a PRoject's Settings)
 
 7. You may want to also add some custom validations e.g. uk_postcode. (login to the mysql container (either with a mysql client either external or via docker-exec))
     * INSERT INTO `redcap_validation_types` (validation_name, validation_label, regex_js, regex_php, data_type, legacy_value, visible) VALUES ('uk_postcode', 'uk_postcode', '/^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i', '/^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i', 'text', \N , '1');
