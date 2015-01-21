@@ -92,6 +92,30 @@ There are three components the database and the redcap web application and the c
 
 5. Use these images to deploy your redcap instances (remember to push in a new password for each client)
 
+6. NOTE: there is no default authentication, and access remains open. The default user is side_admin
+    To fix there are a variety of Authentication options see:
+    https://iwg.devguard.com/trac/redcap/wiki/ChangingAuthenticationMethod
+    But the simplest is "Table Based" instructions for setting up are below:
+
+    * How to change from "None (Public)" to "Table-based" authentication
+
+    * Before simply changing the authentication method, you will first need to create for yourself a new Table-based user that you yourself will use to log in to REDCap. Navigate to the Create New User page in the Control Center and create a new user (you will have to decide what your username will be). Once created, it will send an email to you with your username and a temporary password enclosed.
+    * Before looking in your inbox, go to the Designate Super User page in the Control Center and add your user as a super user. This ensures that you will be able to access the Control Center again when you log in with your new Table-based user in a minute.
+    * Now go to the Security & Authentication page in the Control Center and change the authentication method to Tabled-based (at top of page) and save your changes on that page. Now click on any link/tab on the page, which will now force you to log in with your new Table-based username.
+    * Log in to REDCap with your new username and the password sent to you in the email. It will then ask you to set your password.
+    Now that you have logged in with your new username, go back to the Designate Super User page and remove "site_admin" as a super user.
+    * You're done and can now go and begin giving other users access to REDCap by creating them a username on the Create New User page.
+
+7. You may want to also add some custom validations e.g. uk_postcode. (login to the mysql container (either with a mysql client either external or via docker-exec))
+    * INSERT INTO `redcap_validation_types` (validation_name, validation_label, regex_js, regex_php, data_type, legacy_value, visible) VALUES ('uk_postcode', 'uk_postcode', '/^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i', '/^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i', 'text', \N , '1');
+    * Should give you:
+    validation_name: uk_postcode
+    validation_label: UK Postcode
+    regex_js: /^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i
+    regex_php: /^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i
+    data_type: text
+    legacy_value: NULL
+    visible: 1
 
 
 
