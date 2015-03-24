@@ -28,7 +28,7 @@ There are three components the database and the redcap web application and the c
 ### Build containers locally from the Dockerfiles
 
 1. cd into the web/ or db/ dir so we have the right build context:
-```
+```sh
     $ cd db
     $ docker build --tag="afolarin/redcap:mysql" .
     $ cd ../web
@@ -40,7 +40,7 @@ There are three components the database and the redcap web application and the c
 1. Start the database. This is based on Tutum's mysql image.
     https://github.com/tutumcloud/tutum-docker-mysql
     https://registry.hub.docker.com/u/tutum/mysql/
-```
+```sh
     #start the db container (default mounts vol /etc/mysql and /var/lib/mysql in volumes)
     $ docker run --name="redcap-db" -d -p 3306:3306 afolarin/redcap:mysql
     
@@ -59,13 +59,13 @@ There are three components the database and the redcap web application and the c
     Apache-PHP image.
     https://github.com/tutumcloud/tutum-docker-php
     https://registry.hub.docker.com/u/tutum/apache-php/
-```
+```sh
     $ cd ../web
     docker run -d --name="redcap-web" -v $(pwd)/cron-conf/:/cron-conf/ --link="redcap-db:REDCAP_DB"  --env-file="env.list" --publish="80:80" afolarin/redcap:webapp
 ```
 
 ### Complete the installation via the browser
-```
+```sh
     #get the db host ip address listed in the redcap-docker/db/mysql.pwd file
     #point the browser to IP<port>/redcap/install.php , <port> req. if not port 80
     # e.g. http://172.17.0.12:<port>/redcap/install.php
