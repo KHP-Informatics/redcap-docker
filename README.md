@@ -108,8 +108,13 @@ There are three components the database and the redcap web application and the c
     * You will also be required to change the Project Settings from "Public" to "Table Based" (in Control Centre>>Edit a PRoject's Settings)
 
 7. You may want to also add some custom validations e.g. uk_postcode. (login to the mysql container (either with a mysql client either external or via docker-exec))
-    * INSERT INTO `redcap_validation_types` (validation_name, validation_label, regex_js, regex_php, data_type, legacy_value, visible) VALUES ('uk_postcode', 'uk_postcode', '/^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i', '/^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i', 'text', \N , '1');
+8. run these SQL inserts for some additional validation types:
+    * uk postcode validation:
+```sql
+INSERT INTO `redcap_validation_types` (validation_name, validation_label, regex_js, regex_php, data_type, legacy_value, visible) VALUES ('uk_postcode', 'uk_postcode', '/^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i', '/^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i', 'text', \N , '1');`
+```
     * Should give you:
+
     validation_name: uk_postcode
     validation_label: UK Postcode
     regex_js: /^[A-Z]{1,2}\d{1,3}[ \t]+\d{1,2}[A-Z]{2}$/i
@@ -117,6 +122,7 @@ There are three components the database and the redcap web application and the c
     data_type: text
     legacy_value: NULL
     visible: 1
+
 
 
 
