@@ -15,25 +15,34 @@ With these instructions you should be able to build the redcap-docker images
 I'm not making a public image of this available on DockerHub, the licence for RedCap precludes this.
 Instead, if you want to use this building it from the docker files is straightforward, see below. 
 You will need:
-1. clone the git repository https://github.com/KHP-Informatics/redcap-docker 
-2. Get the web application from the redcap project at http://www.project-redcap.org/ 
-and unzip it in to web/download/ dir
-3. [optional]  Get the pdf fonts especially for international projects
+ 1. clone the git repository https://github.com/KHP-Informatics/redcap-docker 
+ 2. Get the web application from the redcap project at http://www.project-redcap.org/ 
+and unzip it in to web/download/ dir   (see the web/download/README)
+ 3. [optional]  Get the pdf fonts especially for international projects
 https://iwg.devguard.com/trac/redcap/browser/misc/webtools2-pdf.zip?format=raw unzip webtools2-pdf.zip and 
 place the pdf directory replacing the existing web/download/redcap/webtools2/pdf dir.
+ 4. build your containers (see below)
 
 
 ## Build instructions
-There are three components the database and the redcap web application and the cron container.
+There are three components the database, the cron base-image and the redcap web application.
 ### Build containers locally from the Dockerfiles
 
 1. cd into the web/ or db/ dir so we have the right build context:
 ```sh
+    #build the database container
     $ cd db
     $ docker build --tag="afolarin/redcap:mysql" .
+    
+    #build the base-image for the web-app
+    $ cd ../web
+    $ docker build --tag="afolarin/cron-apache-php" .
+    
+    #build the redcap web-app
     $ cd ../web
     $ docker build --tag="afolarin/redcap:webapp" .
-    #NOTE you can substitute the afolarin for your repo
+    
+    #NOTE substitute the 'afolarin' for your dockerhub repo [optional]
 ```
 
 ### Run the containers
@@ -66,7 +75,8 @@ There are three components the database and the redcap web application and the c
 
 ### Complete the installation via the browser
 ```sh
-    #get the db host ip address listed in the redcap-docker/db/mysql.pwd file
+    #get the redcap:webapp host ip address
+    $ docker inspect --format='{{.NetworkSettings.IPAddress}}' redcap-web
     #point the browser to IP<port>/redcap/install.php , <port> req. if not port 80
     # e.g. http://172.17.0.12:<port>/redcap/install.php
 ```
