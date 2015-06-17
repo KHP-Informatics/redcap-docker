@@ -75,7 +75,7 @@ There are three components the database, the cron base-image and the redcap web 
 
 ### Complete the installation via the browser
 ```sh
-    #get the redcap:webapp host ip address
+    #get the redcap:webapp host ip address (or use the public IP of your server)
     $ docker inspect --format='{{.NetworkSettings.IPAddress}}' redcap-web
     #point the browser to IP<port>/redcap/install.php , <port> req. if not port 80
     # e.g. http://172.17.0.12:<port>/redcap/install.php
@@ -90,12 +90,14 @@ There are three components the database, the cron base-image and the redcap web 
 	**NOTE**: don't try to paste these sql statements into the terminal, it's pretty fragile. \
 	Pipe it instead as above. Or even better this little trick \
 	(docker exec -i redcap-db mysql -uadmin -padminDbUserPwd) < redcap-db-build.sql
+	**NOTE** in more recent versions of Redcap, redcap database is now called "redcap_mysql", not "redcap" (and is db is created for you)
 
 3. Check everything works? 
 	* see config testpage e.g.: http://<IP:PORT>/redcap/redcap_v6.0.12/ControlCenter/check.php?upgradeinstall=1
 	* goto http://<IP:PORT>/redcap 
 	* go to "Control Centre>>File Upload Settings>>SET LOCAL FILE STORAGE LOCATION:" set to /edocs \
 	(you can change folder, but it should not be web accessible)
+	* SEE HERE ON CREATING A SUPER-ADMIN: https://iwg.devguard.com/trac/redcap/wiki/ChangingAuthenticationMethod create and designate a superadmin before you switch from public authentication mode (or you'll be locked out)
 	* Create a test project
 
 4. Commit the image, for your future use, DO NOT PUBLISH IMAGE redcap is not opensource!
