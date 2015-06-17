@@ -35,7 +35,7 @@ There are three components the database, the cron base-image and the redcap web 
     $ docker build --tag="afolarin/redcap:mysql" .
     
     #build the base-image for the web-app
-    $ cd ../web
+    $ cd ../web-base
     $ docker build --tag="afolarin/cron-apache-php" .
     
     #build the redcap web-app
