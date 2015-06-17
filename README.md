@@ -70,7 +70,7 @@ There are three components the database, the cron base-image and the redcap web 
     https://registry.hub.docker.com/u/tutum/apache-php/
 ```sh
     $ cd ../web
-    docker run -d --name="redcap-web" -v $(pwd)/cron-conf/:/cron-conf/ --link="redcap-db:REDCAP_DB"  --env-file="env.list" --publish="80:80" afolarin/redcap:webapp
+    $ docker run -d --name="redcap-web" -v $(pwd)/cron-conf/:/cron-conf/ --link="redcap-db:REDCAP_DB"  --env-file="env.list" --publish="80:80" afolarin/redcap:webapp
 ```
 
 ### Complete the installation via the browser
@@ -92,7 +92,7 @@ There are three components the database, the cron base-image and the redcap web 
 	(docker exec -i redcap-db mysql -uadmin -padminDbUserPwd) < redcap-db-build.sql
 
 3. Check everything works? 
-	* see config testpage: http://<IP:PORT>/redcap/redcap_v6.0.12/ControlCenter/check.php?upgradeinstall=1
+	* see config testpage e.g.: http://<IP:PORT>/redcap/redcap_v6.0.12/ControlCenter/check.php?upgradeinstall=1
 	* goto http://<IP:PORT>/redcap 
 	* go to "Control Centre>>File Upload Settings>>SET LOCAL FILE STORAGE LOCATION:" set to /edocs \
 	(you can change folder, but it should not be web accessible)
