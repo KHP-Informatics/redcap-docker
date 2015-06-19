@@ -29,11 +29,31 @@ MAINTAINER Amos Folarin <amosfolarin@gmail.com>
 RUN apt-get update && \
 	    apt-get -yq install \
 	    mysql-server-5.5 \
-	    php5-mcrypt
-
+	    php5-mcrypt \
+        postfix \
+        sendmail
+        
 #setup mycrypt and restart apache
 RUN php5enmod mcrypt && \
 	service apache2 restart
+
+### mail setup: postfix (SMTP) and when you use sendmail (non-SMTP).
+### You may/should prefer to send your mail with a more appropriate mechanism....
+
+#[optional] config sendmail (will req. user completion run sendmailconfig)
+# see: https://holarails.wordpress.com/2013/11/17/configure-sendmail-in-ubuntu-12-04-and-make-it-fast/
+# setup to use TLS
+# RUN cat >> /etc/mail/sendmail.mc <<< "include(`/etc/mail/tls/starttls.m4')dnl" && \
+#    cat >> /etc/mail/submit.mc <<< "include(`/etc/mail/tls/starttls.m4')dnl"
+
+#[optional] config postfix 
+# service postfix start   #and select config. see http://www.slideshare.net/dotCloud/postfix-tuto4
+# I can seemingly only get postfix to work with ipv4 ... https://www.solver.io/wp/2012/10/15/postfix-gmail-network-is-unreachable/
+RUN service postfix start && \
+    sed -i 's/inet_protocols = all/inet_protocols = ipv4/' /etc/postfix/main.cf && \
+    /etc/init.d/postfix reload
+    
+
 
 
 # copy redcap application into the container /app which is linked as /var/www/html
