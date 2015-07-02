@@ -30,8 +30,8 @@ RUN apt-get update && \
 	    apt-get -yq install \
 	    mysql-server-5.5 \
 	    php5-mcrypt \
-        postfix \
-        sendmail
+        postfix 
+#      sendmail
         
 #setup mycrypt and restart apache
 RUN php5enmod mcrypt && \
