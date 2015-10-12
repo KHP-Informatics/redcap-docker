@@ -9,7 +9,7 @@ Release Version:
 
 ## Redcap Dockerfiles
 With these instructions you should be able to build the redcap-docker images
- can and should be deployable relatively simply in any environment running Docker.
+ which should then be deployable relatively simply in any environment running Docker. We have found these containers useful for testing.
 
 ## Distributing Docker Image
 I'm not making a public image of this available on DockerHub, the licence for RedCap precludes this.
