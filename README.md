@@ -135,7 +135,25 @@ INSERT INTO `redcap_validation_types` (validation_name, validation_label, regex_
     legacy_value: NULL
     visible: 1
 
+#Restarting the Redcap Containers
+If you restart the containers you'll probably see an error in the browser saying that the /app/redcap/database.php probably has the wrong ipaddress, username, password -- the problem will be the ipaddress.
 
+Note (until I have sorted deploying these with Compose and native networking) we are still stuck with ip addresses which change when you restart the container! The simple solution is to enter the container and change the /app/redcap/database.php file to the new database container's ip address.
+```sh
+#from the host
+#get the new db IP address
+$ docker inspect -it redcap-db | grep IPAddress
+
+#enter the web-app container
+$ docker exec -it redcap-web /bin/bash
+
+#change $hostname       = '172.17.0.3'; to the correct ip address
+vi /app/redcap/database.php
+
+
+#refresh the browser and you should be back in action
+
+```
 
 
 
